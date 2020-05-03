@@ -28,3 +28,11 @@ logInjectionTaintFlow.from(servletSources)						//Source
 		 				 										*1 means report at source location.
 										 			 			*2 means report at sink location. 
 		 				 							 			*/
+		 				 							 			
+TaintFlow logInjectionTaintFlow2 = new TaintFlow();
+
+logInjectionTaintFlow2.from(servletSources)						
+						.notThrough(sanitizer)										
+						.to(logInjectionSinks)					
+						.report("Log-Injection CWE-117!")		
+						.at(3);									
