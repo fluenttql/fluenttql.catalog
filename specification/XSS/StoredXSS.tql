@@ -1,0 +1,40 @@
+import "../Sinks/ServletSinks.tql";
+
+/*
+ * For Stored XSS below are the two workarounds to have fluentTQL specifications.
+ * 1. Use the SQL Injection fluentTQL specification to avoid storing the malicious comments into database.
+ * 2. Use the below specification to avoid sending the malicious comments from database to client.
+ * 
+ * For the actual solution, there is a need to changing the fluentTQL language in future.
+ */
+ 
+/**
+ * getLastComment is a source that returns the sensitive data from the database.
+ */
+Method source = new Method("catalog.XSS.CWE79.StoredXSS: java.lang.String getLastComment()")
+				.out().return();
+								
+/**
+ * encodeForHTML is a OWASP sanitizer that encodes the HTML related data. Therefore, flow should go through this method to avoid vulnerability.
+ */
+Method sanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String encodeForHTML(java.lang.String)")
+				.in().param(0)
+				.out().return();
+
+/**
+ * decodeForHTML is a OWASP de-sanitizer that decodes the HTML related data back to HTML entities. Therefore, flow should not go though this method to avoid 
+ * vulnerability.
+ */
+Method deSanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String decodeForHTML(java.lang.String)")
+					.in().param(0)
+					.out().return();
+						
+new TaintFlow().from(source)                 		//source methods
+			.through(deSanitizer)					//de-sanitizer method that causes the vulnerability
+			.notThrough(sanitizer)					//sanitizer method that avoids the vulnerability
+			.to(servletSinks)                     	//sink methods
+			.report("Stored XSS - CWE79!")     		//report message
+			.at(1);     							/*3 means report at both source and sink location.
+		 				 							 *1 means report at source location.
+										 			 *2 means report at sink location. 
+		 				 							 */

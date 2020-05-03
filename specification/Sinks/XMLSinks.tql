@@ -1,0 +1,14 @@
+// these are sink methods for XPath injection. The list is created based on: https://github.com/julianthome/joanaudit/blob/master/config/sinks.json
+
+
+Method sink1 = new Method("org.xml.sax.XMLReader: void parse(org.xml.sax.InputSource)")
+			.in().param(0);
+			
+Method sink2 = new Method("org.apache.http.client.methods.HttpPost: void setEntity(org.apache.http.HttpEntity)")
+			.in().param(0);			
+	
+Method sink3 = new Method("org.apache.http.client.methods.HttpPost: void setHeader(java.lang.String, java.lang.String)")
+			.in().param(1); // first argument is key, second argument is value
+			
+			
+MethodSet sinksXMLinjection = new MethodSet().addMethod(sink1).addMethod(sink2).addMethod(sink3);

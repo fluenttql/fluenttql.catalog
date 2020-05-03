@@ -1,0 +1,19 @@
+
+Method source1 = new Method("org.owasp.webgoat.session.ParameterParser: java.lang.String getRawParameter(java.lang.String, java.lang.String)")
+				.out().return();
+								
+Method source2 = new Method("org.owasp.webgoat.session.ParameterParser: java.lang.String getStringParameter(java.lang.String, java.lang.String)")
+				.out().return();
+								
+Method source3 = new Method("org.owasp.webgoat.session.ParameterParser: int getIntParameter(java.lang.String)")
+				.out().return();
+		
+Method source4 = new Method("org.owasp.webgoat.session.ParameterParser: java.lang.String[] getParameterValues(java.lang.String)")
+				.out().return();		
+				
+				
+MethodSet webgoatSources = new MethodSet()
+						.addMethod(source1)
+						.addMethod(source2)
+						.addMethod(source3)
+						.addMethod(source4);

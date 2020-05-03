@@ -1,0 +1,19 @@
+//Below are few of the list of sinks for Log-Injection.
+
+Method sink1 = new Method("java.util.logging.Logger: void info(java.lang.String)")
+				.in().param(0);
+				
+Method sink2 = new Method("java.util.logging.Logger: void log(java.util.logging.Level, java.lang.String)")
+				.in().param(1);
+				
+Method sink3 = new Method("java.util.logging.Logger: void entering(java.lang.String, java.lang.String)")
+				.in().param(0).param(1);
+				
+Method sink4 = new Method("java.util.logging.Logger: void exiting(java.lang.String, java.lang.String)")
+				.in().param(0).param(1);
+				
+MethodSet logInjectionSinks = new MethodSet()
+								.addMethod(sink1)
+								.addMethod(sink2)
+								.addMethod(sink3)
+								.addMethod(sink4);

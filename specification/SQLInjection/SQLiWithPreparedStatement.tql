@@ -1,0 +1,54 @@
+import "../Sources/ServletSources.tql";
+import "../Sinks/PreparedStatementSinks.tql";
+
+/**
+ * encodeForSQL is a OWASP sanitizer that encodes the SQL related data. Therefore, flow should go through this method to avoid vulnerability.
+ */			
+Method sanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String encodeForSQL(org.owasp.esapi.codecs.Codec, java.lang.String)")
+				.in().param(1)
+				.out().return();
+				
+/*
+ * Below are the 6 required propagator that has to be called to create a PreparedStatement object.
+ */
+Method requiredPropagator1 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String)")
+							.in().param(0)
+							.out().return();
+							
+Method requiredPropagator2 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String, int)")
+							.in().param(0)
+							.out().return();
+							
+Method requiredPropagator3 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String, java.lang.String[])")
+							.in().param(0)
+							.out().return();
+							
+Method requiredPropagator4 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String, int[])")
+							.in().param(0)
+							.out().return();
+							
+Method requiredPropagator5 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String, int, int)")
+							.in().param(0)
+							.out().return();
+							
+Method requiredPropagator6 = new Method("java.sql.Connection: java.sql.PreparedStatement prepareStatement(java.lang.String, int, int, int)")
+							.in().param(0)
+							.out().return();
+							
+MethodSet requiredPropagator = new MethodSet()
+								.addMethod(requiredPropagator1)
+								.addMethod(requiredPropagator2)
+								.addMethod(requiredPropagator3)
+								.addMethod(requiredPropagator4)
+								.addMethod(requiredPropagator5)
+								.addMethod(requiredPropagator6);
+							
+new TaintFlow().from(servletSources)														//Source
+				.notThrough(sanitizer)														//Sanitizer
+				.through(requiredPropagator)												//Required Propagator
+				.to(prepSinks)																//Sink
+				.report("SQL-Injection, even though its prepared statement - CWE89!!!")		//Report message.
+				.at(3);																		/*3 means report at both source and sink location.
+												 			 								*1 means report at source location.
+												 			 								*2 means report at sink location. 
+												 			 								*/

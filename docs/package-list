@@ -1,0 +1,11 @@
+catalog
+catalog.CommandInjection.CWE77
+catalog.LDAPInjection.CWE90
+catalog.LogInjectionAttack.CWE117
+catalog.NoSQLInjection.CWE943
+catalog.OpenRedirect.CWE601
+catalog.PathTraversalAttack.CWE22
+catalog.SQLInjection.CWE89
+catalog.TrustBoundaryViolation.CWE501
+catalog.XPATHInjection.CWE643
+catalog.XSS.CWE79

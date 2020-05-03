@@ -1,0 +1,15 @@
+//Below are the few sink methods from Servlet application.
+
+Method sink1 = new Method("java.io.PrintWriter: java.io.PrintWriter append(java.lang.String)")
+			.in().param(0);
+								
+Method sink2 = new Method("java.io.PrintWriter: void print(java.lang.String)")
+			.in().param(0);
+								
+Method sink3 = new Method("java.io.PrintWriter: void println(java.lang.String)")
+			.in().param(0);
+								
+MethodSet servletSinks = new MethodSet()
+						.addMethod(sink1)
+						.addMethod(sink2)
+						.addMethod(sink3);

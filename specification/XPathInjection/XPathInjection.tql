@@ -1,0 +1,19 @@
+import "../Sources/ServletSources.tql";
+import "../Sinks/XPathSinks.tql";
+
+/*
+ * encodeForXPath is OWASP sanitizer that encodes the string to avoid XPath-Injection.
+ */
+Method sanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String encodeForXPath(java.lang.String)")
+				.in().param(0)
+				.out().return();
+				
+new TaintFlow()
+	.from(servletSources)						//Source
+	.notThrough(sanitizer)						//Sanitizer
+	.to(xpathSinks)								//Sink
+	.report("XPath-Injection - CWE643!")		//Report message
+	.at(3);										/*3 means report at both source and sink location.
+												*1 means report at source location.
+										 		*2 means report at sink location. 
+		 				 						*/

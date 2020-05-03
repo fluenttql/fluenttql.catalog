@@ -1,0 +1,53 @@
+import "../Sources/ServletSources.tql";
+
+/**
+ * This is a user defined sanitizer for avoiding path traversal attack. This is not recommended to use this method. This is for example.
+ */
+Method sanitizer = new Method("catalog.PathTraversalAttack.PathTraversal: java.lang.String sanitizeForPATH(java.lang.String)")
+					.in().param(0)
+					.out().return();
+					
+/**
+ * This is a required propagator that is used in the second taint flow to achieve path traversal attack.
+ */
+Method requiredPropagator = new Method("java.io.File: java.io.File File(java.lang.String)")
+							.in().param(0)
+							.out().thisObject();
+							
+/**
+ * This is the sink in first taint flow where File constructor is not used.
+ */
+Method sink1 = new Method("java.io.FileInputStream: java.io.FileInputStream FileInputStream(java.lang.String)")
+				.in().param(0);
+				
+/**
+ * This is the sink for second taint flow where File constructor is used as a required propagator.
+ */
+Method sink2 = new Method("java.io.FileInputStream: java.io.FileInputStream FileInputStream(java.io.File)")
+				.in().param(0);
+				
+/**
+ * This is the first taint flow that achieves path traversal attack.
+ */
+TaintFlow tf1 = new TaintFlow()
+	.from(servletSources)								//Source
+	.notThrough(sanitizer)								//sanitizer
+	.to(sink1)											//sink
+	.report("Path traversal - CWE22!")			//report message
+	.at(3); 								
+	
+TaintFlow tf2 = new TaintFlow()
+	.from(servletSources)														//Source
+	.notThrough(sanitizer)														//sanitizer
+	.through(requiredPropagator)												//Required propagator, but has to be called after sanitizer is called.
+	.to(sink2)																	//sink
+	.report("Path traversal attack through File constructor - CWE22!")			//report message
+	.at(3);																		/*3 means report at both source and sink location.
+												 			 					*1 means report at source location.
+												 			 					*2 means report at sink location. 
+												 								*/
+	
+//TaintFlowSet for path traversal attack that contains the above both taint flows that achieves path traversal attack.
+TaintFlowSet pathTraversalTFSet = new TaintFlowSet()
+									.addTaintFlow(tf1)
+									.addTaintFlow(tf2);

@@ -1,0 +1,42 @@
+//First source that takes userName from the user.
+Method source1 = new Method("catalog.NoSQLInjection.CWE943.NoSQLInjectionWithTwoSources: java.lang.String getUserName()")
+				.out().return();
+				
+//Second source that takes old password from the user.
+Method source2 = new Method("catalog.NoSQLInjection.CWE943.NoSQLInjectionWithTwoSources: java.lang.String getOldPassword()")
+				.out().return();
+				
+//Third souce that takes new password from the user.
+Method source3 = new Method("catalog.NoSQLInjection.CWE943.NoSQLInjectionWithTwoSources: java.lang.String getNewPassword()")
+				.out().return();
+				
+//sanitizeForMongoDB is user defined simple sanitizer for mongodb.
+Method sanitizer = new Method("catalog.NoSQLInjection.CWE943.NoSQLInjectionWithTwoSources: java.lang.String sanitizeForMongoDB(java.lang.String)")
+				.in().param(0)
+				.out().return();
+
+//put is a method that the data flow has to go through after sanitizer to form a filer to update the password. 
+//If the data flow goes through this method before sanitizer then there will be a security vulnerability.
+Method requiredPropagator1 = new Method("com.mongodb.BasicDBObject: com.mongodb.BasicDBObject put(java.lang.String, java.lang.String)")
+							.in().param(1)
+							.out().thisObject();
+								
+//this put is a method that the data flow has to go through after sanitizer to form a new BasicDBObject password to update the password in mongodb. 
+//If the data flow goes through this method before sanitizer then there will be a security vulnerability.
+Method requiredPropagator2 = new Method("com.mongodb.BasicDBObject: com.mongodb.BasicDBObject put(java.lang.String, com.mongodb.BasicDBObject)")
+							.in().param(1)
+							.out().thisObject();
+
+//updateOne is a sink that updates the password.
+Method sink = new Method("com.mongodb.client.MongoCollection: com.mongodb.client.FindIterable updateOne(com.mongodb.BasicDBObject, com.mongodb.BasicDBObject)")
+			.in().param(0).param(1);
+								
+TaintFlow myTF = new TaintFlow();
+
+myTF.from(source1).notThrough(sanitizer).through(requiredPropagator1).to(sink)
+	.and()
+	.from(source2).notThrough(sanitizer).through(requiredPropagator1).to(sink)
+	.and()
+	.from(source3).notThrough(sanitizer).through(requiredPropagator2).to(sink)
+	.report("There is a No-SQL-Injection (CWE943) with multiple sources")
+	.at(2);
