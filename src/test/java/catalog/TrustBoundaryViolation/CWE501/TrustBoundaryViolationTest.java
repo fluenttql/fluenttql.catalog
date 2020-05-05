@@ -137,16 +137,15 @@ public class TrustBoundaryViolationTest {
         TrustBoundaryViolation myServlet = new TrustBoundaryViolation();
         myServlet.doGetWithoutSanitizer(request, response);
         String result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nResults when attacker tries Trust boundary violation:");
-        System.out.println("Response after the login: " + result);
+        System.out.println("\n**********" +
+                "Results when attacker tries Trust boundary violation without sanitizer:**********");
+        System.out.println("Requested the service that sets the user attribute in the session object");
 
         MYSW.getBuffer().delete(0, MYSW.getBuffer().length());
         myServlet.requestAfterAuthentication(request, response);
 
         result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nTries to request some other service from the application that does not use sanitizer" +
-                "(Server " +
-                "process the request because of trust boundary violation):");
+        System.out.println("\nTries to request some other trusted service from the application:");
         System.out.println(result);
     }
 
@@ -164,15 +163,15 @@ public class TrustBoundaryViolationTest {
         TrustBoundaryViolation myServlet = new TrustBoundaryViolation();
         myServlet.doGetWithSanitizer(request, response);
         String result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nResults when attacker tries Trust boundary violation:");
-        System.out.println("Response after the login: " + result);
+        System.out.println("\n**********" +
+                "Results when attacker tries Trust boundary violation with sanitizer:**********");
+        System.out.println("Requested the service that sets the user attribute in the session object");
 
         MYSW.getBuffer().delete(0, MYSW.getBuffer().length());
         myServlet.requestAfterAuthentication(request, response);
 
         result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nTries to request some other service from the application that uses sanitizer (Server " +
-                "does not process the request because of trust boundary violation):");
+        System.out.println("\nTries to request some other trusted service from the application:");
         System.out.println(result);
     }
 
@@ -190,14 +189,15 @@ public class TrustBoundaryViolationTest {
         TrustBoundaryViolation myServlet = new TrustBoundaryViolation();
         myServlet.doGetWithoutSanitizer(request, response);
         String result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nResults when normal user accessing the server without sanitizer:");
-        System.out.println("Response after the login: " + result);
+        System.out.println("\n**********" +
+                "Results when normal user accessing the server without sanitizer:**********");
+        System.out.println("Requested the service that sets the user attribute in the session object");
 
         MYSW.getBuffer().delete(0, MYSW.getBuffer().length());
         myServlet.requestAfterAuthentication(request, response);
 
         result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nTries to request some other service from the application:");
+        System.out.println("\nTries to request some other trusted service from the application:");
         System.out.println(result);
     }
 
@@ -210,19 +210,20 @@ public class TrustBoundaryViolationTest {
      */
     @Test
     public void normalUserAccessingTheDataWithSanitizer() throws IOException {
-        setHttpServlet("admin", "mypasds");
+        setHttpServlet("admin", "mypass");
 
         TrustBoundaryViolation myServlet = new TrustBoundaryViolation();
         myServlet.doGetWithSanitizer(request, response);
         String result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nResults when normal user accessing the server with sanitizer:");
-        System.out.println("Response after the login: " + result);
+        System.out.println("\n**********" +
+                "Results when normal user accessing the server with sanitizer:**********");
+        System.out.println("Requested the service that sets the user attribute in the session object");
 
         MYSW.getBuffer().delete(0, MYSW.getBuffer().length());
         myServlet.requestAfterAuthentication(request, response);
 
         result = MYSW.getBuffer().toString().trim();
-        System.out.println("\nTries to request some other service from the application:");
+        System.out.println("\nTries to request some other trusted service from the application:");
         System.out.println(result);
     }
 }

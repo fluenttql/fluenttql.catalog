@@ -12,18 +12,19 @@ public class TrustBoundaryViolation {
 
     /**
      * This is considered as a sanitizer that authenticate the user before setting the attribute "user" in session object.
+     * If the authentication fails then it returns null so that tainted values will not reach the sinks.
      *
      * @param user User name
      * @param pass Password
      * @return Authentication successfull or not.
      */
-    private boolean authenticate(String user, String pass) {
+    private String authenticate(String user, String pass) {
         if ("admin".equals(user)) {
             if ("mypass".equals(pass)) {
-                return true;
+                return user;
             }
         }
-        return false;
+        return null;
     }
 
     /**
@@ -67,12 +68,8 @@ public class TrustBoundaryViolation {
 
         if (mySession.getAttribute("user") == null) {
 
-            if (authenticate(user, pass)) {
-                mySession.setAttribute("user", user);
-                resp = "Logged in successfully.";
-            } else {
-                resp = "Invalid username or password!!!";
-            }
+            String sanitizedUser = authenticate(user, pass);
+            mySession.setAttribute("user",sanitizedUser);
 
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
@@ -106,12 +103,6 @@ public class TrustBoundaryViolation {
         String resp = "";
 
         if (mySession.getAttribute("user") == null) {
-
-            if (authenticate(user, pass)) {
-                resp = "Logged in successfully.";
-            } else {
-                resp = "Invalid username or password!!!";
-            }
 
             mySession.setAttribute("user", user);
 
