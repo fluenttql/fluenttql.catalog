@@ -3,3 +3,5 @@
 /.idea/
 fluenttql.catalog.iml
 *.class
+/.classpath
+/.project
