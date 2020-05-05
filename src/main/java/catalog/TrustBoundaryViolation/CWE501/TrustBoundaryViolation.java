@@ -1,128 +1,133 @@
 package catalog.TrustBoundaryViolation.CWE501;
 
-import javax.servlet.ServletContext;
-import javax.servlet.http.*;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.util.Enumeration;
 
+/**
+ * This class contains the example for Trust boundary violation.
+ */
 public class TrustBoundaryViolation {
 
-    private int authenticate(String user, String pass) {
-        if("admin".equals(user)) {
-            if("mypass".equals(pass)) {
-                return 0;
+    /**
+     * This is considered as a sanitizer that authenticate the user before setting the attribute "user" in session object.
+     *
+     * @param user User name
+     * @param pass Password
+     * @return Authentication successfull or not.
+     */
+    private boolean authenticate(String user, String pass) {
+        if ("admin".equals(user)) {
+            if ("mypass".equals(pass)) {
+                return true;
             }
         }
-        return 1;
+        return false;
     }
 
-    public void doGetWithoutSanitizer(HttpServletRequest request, HttpServletResponse response) {
-        String sessId = request.getParameter("session-id");
-        String user = request.getParameter("user");
-        String pass = request.getParameter("pass");
+    /**
+     * A simple request from the user that has to be called by the user after the authentication is successfull.
+     * If the authentication is not used and session object is set then this method can still be accessed with
+     * invalid username this is because of the trust boundary violation attack.
+     *
+     * @param request  HttpServlet request from the user.
+     * @param response HttpServlet response to the user.
+     * @throws IOException If fails to write the response.
+     */
+    public void requestAfterAuthentication(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession mySession = request.getSession();
 
-        authenticate(user,pass);
-        
-        if(sessId == null) {
-
-            mySession.setAttribute("user",user);
-
+        if (mySession.getAttribute("user") != null) {
 
             response.setContentType("text/html;charset=UTF-8");
             response.setCharacterEncoding("UTF-8");
-            System.out.println("Inside web container = " + mySession.getId());
-
-            response.addHeader("session-id",mySession.getId());
-            try {
-                response.getWriter().append("authenticated");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if(mySession.getId().equals(sessId)) {
-            if(mySession.getAttribute("user").equals(user)) {
-                response.setContentType("text/html;charset=UTF-8");
-                response.setCharacterEncoding("UTF-8");
-                response.addHeader("session-id",mySession.getId());
-                try {
-                    response.getWriter().append("Already Logged in");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            response.getWriter().append("Successfully processed the request.");
+        } else {
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().append("Please login to process this request");
         }
     }
 
-    HttpSession mySession = new HttpSession() {
-        private String user = null;
-        public long getCreationTime() {
-            return 0;
+    /**
+     * A simple request from the user that authenticate and set the session object with "user" attribute.
+     * Since authenticate is used here trust boundary violation is avoided.
+     *
+     * @param request  HttpServlet request from the user.
+     * @param response HttpServlet response to the user.
+     * @throws IOException If fails to write the response.
+     */
+    public void doGetWithSanitizer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession mySession = request.getSession();
+        mySession.getId();
+        String user = request.getParameter("user");
+        String pass = request.getParameter("pass");
+        String resp = "";
+
+        if (mySession.getAttribute("user") == null) {
+
+            if (authenticate(user, pass)) {
+                mySession.setAttribute("user", user);
+                resp = "Logged in successfully.";
+            } else {
+                resp = "Invalid username or password!!!";
+            }
+
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().append(resp);
+        } else {
+            if (mySession.getAttribute("user").equals(user)) {
+                resp = "Already logged in.";
+            } else {
+                resp = "Invalid username!! Please log in again";
+            }
+
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().append(resp);
         }
+    }
 
-        public String getId() {
-            return "testing-id";
+    /**
+     * A simple request from the user that authenticate and set the session object with "user" attribute.
+     * Since authenticate is not used to set the session object here. Independent of authentication result session object is set.
+     * Therefore trust boundary violation will happen.
+     *
+     * @param request  HttpServlet request from the user.
+     * @param response HttpServlet response to the user.
+     * @throws IOException If fails to write the response.
+     */
+    public void doGetWithoutSanitizer(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        HttpSession mySession = request.getSession();
+        String user = request.getParameter("user");
+        String pass = request.getParameter("pass");
+        String resp = "";
+
+        if (mySession.getAttribute("user") == null) {
+
+            if (authenticate(user, pass)) {
+                resp = "Logged in successfully.";
+            } else {
+                resp = "Invalid username or password!!!";
+            }
+
+            mySession.setAttribute("user", user);
+
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().append(resp);
+        } else {
+            if (mySession.getAttribute("user").equals(user)) {
+                resp = "Already logged in.";
+            } else {
+                resp = "Invalid username!! Please log in again";
+            }
+
+            response.setContentType("text/html;charset=UTF-8");
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().append(resp);
         }
-
-        public long getLastAccessedTime() {
-            return 0;
-        }
-
-        public ServletContext getServletContext() {
-            return null;
-        }
-
-        public void setMaxInactiveInterval(int i) {
-
-        }
-
-        public int getMaxInactiveInterval() {
-            return 0;
-        }
-
-        public HttpSessionContext getSessionContext() {
-            return null;
-        }
-
-        public Object getAttribute(String s) {
-            if("user".equals(s))
-                return user;
-            return null;
-        }
-
-        public Object getValue(String s) {
-            return null;
-        }
-
-        public Enumeration<String> getAttributeNames() {
-            return null;
-        }
-
-        public String[] getValueNames() {
-            return new String[0];
-        }
-
-        public void setAttribute(String s, Object o) {
-            if("user".equals(s))
-                user = (String) o;
-        }
-
-        public void putValue(String s, Object o) {
-
-        }
-
-        public void removeAttribute(String s) {
-
-        }
-
-        public void removeValue(String s) {
-
-        }
-
-        public void invalidate() {
-
-        }
-
-        public boolean isNew() {
-            return false;
-        }
-    };
+    }
 }
