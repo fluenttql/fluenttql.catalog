@@ -1,5 +1,6 @@
 package catalog.XPATHInjection.CWE643;
 
+import catalog.PathTraversalAttack.CWE22.PathTraversal;
 import catalog.SuppressLibraryOutput;
 import org.apache.xml.dtm.ref.DTMNodeList;
 import org.owasp.esapi.ESAPI;
@@ -25,6 +26,10 @@ import java.io.IOException;
  * @see <a href="https://vulncat.fortify.com/en/detail?id=desc.dataflow.cfml.xpath_injection#Java%2FJSPFortify" target="_blank">Application Security: XPath-Injection</a>
  */
 public class XPathInjection extends HttpServlet {
+    ClassLoader classLoader = PathTraversal.class.getClassLoader();
+    File file = new File(classLoader.getResource("accounts.xml")
+            .getFile());
+
     /**
      * This method prints the user's account number after authenticating the username and password. This
      * method does not use sanitizer, therefore, it has a XPath-Injection.
@@ -50,7 +55,7 @@ public class XPathInjection extends HttpServlet {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document doc = builder.parse("src\\main\\java\\catalog\\XPATHInjection\\accounts.xml");
+            Document doc = builder.parse(file.getAbsolutePath());
             XPathFactory factory = XPathFactory.newInstance();
             XPath xpath = factory.newXPath();
             XPathExpression expr1 = xpath.compile(query1);
@@ -103,7 +108,7 @@ public class XPathInjection extends HttpServlet {
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
             domFactory.setNamespaceAware(true);
             DocumentBuilder builder = domFactory.newDocumentBuilder();
-            Document doc = builder.parse("src\\main\\java\\catalog\\XPATHInjection\\accounts.xml");
+            Document doc = builder.parse(file.getAbsolutePath());
             XPathFactory factory = XPathFactory.newInstance();
             XPath xpath = factory.newXPath();
             XPathExpression expr1 = xpath.compile(query1);

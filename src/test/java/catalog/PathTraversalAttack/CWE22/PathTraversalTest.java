@@ -15,7 +15,7 @@ import static org.mockito.Mockito.when;
 
 public class PathTraversalTest {
     private static StringWriter MYSW = null;
-    private static final String MALICIOUSFILENAME = "../../../../resources/validation.properties";
+    private static final String MALICIOUSFILENAME = "../validation.properties";
     private static final String FILENAME = "user1File.txt";
 
     @Mock

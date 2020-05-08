@@ -131,7 +131,7 @@ public class CommandInjection extends HttpServlet {
                     "	</body>\r\n" +
                     "</html>");
         } catch (IOException e) {
-            System.out.println("An error ocurred while printOSCommandResults");
+            System.out.println("An error occurred while printOSCommandResults");
         }
     }
 

@@ -27,7 +27,12 @@ public class PathTraversal extends HttpServlet {
 
         String fileName = request.getParameter("fileName");
 
-        FileInputStream myFIS = new FileInputStream("src/main/java/catalog/PathTraversalAttack/userFiles/" + fileName);
+        ClassLoader classLoader = PathTraversal.class.getClassLoader();
+
+        File file = new File(classLoader.getResource("user1/" + fileName)
+                .getFile());
+
+        FileInputStream myFIS = new FileInputStream(file);
 
         BufferedReader myBR = new BufferedReader(new InputStreamReader(myFIS));
 
@@ -55,10 +60,15 @@ public class PathTraversal extends HttpServlet {
         String resp = "";
         String fileName = request.getParameter("fileName");
 
+        ClassLoader classLoader = PathTraversal.class.getClassLoader();
+
         try {
             fileName = sanitizeForPATH(fileName);
 
-            FileInputStream myFIS = new FileInputStream("src/main/java/catalog/PathTraversalAttack/userFiles/" + fileName);
+            File file = new File(classLoader.getResource("user1/" + fileName)
+                    .getFile());
+
+            FileInputStream myFIS = new FileInputStream(file);
 
             BufferedReader myBR = new BufferedReader(new InputStreamReader(myFIS));
 
@@ -70,6 +80,8 @@ public class PathTraversal extends HttpServlet {
 
 
         } catch (IOException e) {
+            resp = "Invalid File name. Please enter valid file name.";
+        } catch (NullPointerException e) {
             resp = "Invalid File name. Please enter valid file name.";
         }
 
