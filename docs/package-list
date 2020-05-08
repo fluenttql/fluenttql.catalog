@@ -7,5 +7,6 @@ catalog.OpenRedirect.CWE601
 catalog.PathTraversalAttack.CWE22
 catalog.SQLInjection.CWE89
 catalog.TrustBoundaryViolation.CWE501
+catalog.XMLInjection.CWE91
 catalog.XPATHInjection.CWE643
 catalog.XSS.CWE79

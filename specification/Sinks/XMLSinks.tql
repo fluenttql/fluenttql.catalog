@@ -10,5 +10,8 @@ Method sink2 = new Method("org.apache.http.client.methods.HttpPost: void setEnti
 Method sink3 = new Method("org.apache.http.client.methods.HttpPost: void setHeader(java.lang.String, java.lang.String)")
 			.in().param(1); // first argument is key, second argument is value
 			
+
+Method sink4 = new Method("javax.xml.parsers.DocumentBuilder: org.w3c.dom.Document parse(org.xml.sax.InputSource)")
+			.in().param(0);
 			
-MethodSet sinksXMLinjection = new MethodSet().addMethod(sink1).addMethod(sink2).addMethod(sink3);
+MethodSet sinksXMLinjection = new MethodSet().addMethod(sink1).addMethod(sink2).addMethod(sink3).addMethod(sink4);
