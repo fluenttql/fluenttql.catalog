@@ -17,7 +17,7 @@ Method deSanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String decod
 				.in().param(0)
 				.out().return();
 				
-TaintFlow logInjectionTaintFlow = new TaintFlow();
+TaintFlowQuery logInjectionTaintFlow = new TaintFlowQuery();
 
 logInjectionTaintFlow.from(servletSources)						//Source
 						.notThrough(sanitizer)					//Sanitizer
@@ -29,7 +29,7 @@ logInjectionTaintFlow.from(servletSources)						//Source
 										 			 			*2 means report at sink location. 
 		 				 							 			*/
 		 				 							 			
-TaintFlow logInjectionTaintFlow2 = new TaintFlow();
+TaintFlowQuery logInjectionTaintFlow2 = new TaintFlowQuery();
 
 logInjectionTaintFlow2.from(servletSources)						
 						.notThrough(sanitizer)										

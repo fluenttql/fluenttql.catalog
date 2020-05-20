@@ -26,7 +26,7 @@ Method requiredPropogator = new Method("com.mongodb.BasicDBObject: com.mongodb.B
 Method sink = new Method("com.mongodb.client.MongoCollection: com.mongodb.client.FindIterable find(com.mongodb.BasicDBObject)")
 			.in().param(0);
 						
-new TaintFlow()
+new TaintFlowQuery()
 		.from(source)                 			//source methods
 		.notThrough(sanitizer)					//sanitizer
 		.through(requiredPropogator)			//requires propagator

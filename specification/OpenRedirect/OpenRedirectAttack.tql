@@ -18,7 +18,7 @@ Method sink1 = new Method("javax.servlet.http.HttpServletResponse: void sendRedi
 Method sink2 = new Method("javax.servlet.RequestDispatcher: void forward(javax.servlet.ServletRequest, javax.servlet.ServletResponse)")
 				.in().thisObject();
 				
-TaintFlow tf1 = new TaintFlow()
+TaintFlowQuery tf1 = new TaintFlowQuery()
 				.from(servletSources)								//Source
 				.notThrough(sanitizer)								//Sanitizer
 				.to(sink1)											//Sink
@@ -28,13 +28,13 @@ TaintFlow tf1 = new TaintFlow()
 															 	 	*2 means report at sink location. 
 		 	  													 	*/
 				
-TaintFlow tf2 = new TaintFlow()
+TaintFlowQuery tf2 = new TaintFlowQuery()
 				.from(source4)
 				.notThrough(sanitizer)
 				.to(sink2)
 				.report("Open-Redirect - CWE601!")
 				.at(3);
 				
-new TaintFlowSet()
-			.addTaintFlow(tf1)
-			.addTaintFlow(tf2);
+new QueriesSet()
+			.addTaintFlowQuery(tf1)
+			.addTaintFlowQuery(tf2);

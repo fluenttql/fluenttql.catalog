@@ -8,7 +8,7 @@ Method sanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String encodeF
 				.in().param(0)
 				.out().return();
 				
-new TaintFlow()
+new TaintFlowQuery()
 	.from(servletSources)						//Source
 	.notThrough(sanitizer)						//Sanitizer
 	.to(xpathSinks)								//Sink

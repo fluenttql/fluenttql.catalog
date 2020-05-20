@@ -16,7 +16,7 @@ Method sanitizer = new Method("catalog.TrustBoundaryViolation.CWE501.TrustBounda
 Method sink = new Method("javax.servlet.http.HttpSession: void setAttribute(java.lang.String, java.lang.Object)")
 				.in().param(1);
 				
-new TaintFlow()
+new TaintFlowQuery()
 			.from(servletSources)									//Source
 			.notThrough(sanitizer)									//Sanitizer
 			.to(sink)												//Sink

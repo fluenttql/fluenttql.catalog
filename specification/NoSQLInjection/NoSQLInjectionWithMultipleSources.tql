@@ -31,7 +31,7 @@ Method requiredPropagator2 = new Method("com.mongodb.BasicDBObject: com.mongodb.
 Method sink = new Method("com.mongodb.client.MongoCollection: com.mongodb.client.FindIterable updateOne(com.mongodb.BasicDBObject, com.mongodb.BasicDBObject)")
 			.in().param(0).param(1);
 								
-TaintFlow myTF = new TaintFlow();
+TaintFlowQuery myTF = new TaintFlowQuery();
 
 myTF.from(source1).notThrough(sanitizer).through(requiredPropagator1).to(sink)
 	.and()

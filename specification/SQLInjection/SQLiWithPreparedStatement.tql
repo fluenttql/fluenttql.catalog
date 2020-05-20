@@ -43,7 +43,7 @@ MethodSet requiredPropagator = new MethodSet()
 								.addMethod(requiredPropagator5)
 								.addMethod(requiredPropagator6);
 							
-new TaintFlow().from(servletSources)														//Source
+new TaintFlowQuery().from(servletSources)														//Source
 				.notThrough(sanitizer)														//Sanitizer
 				.through(requiredPropagator)												//Required Propagator
 				.to(prepSinks)																//Sink

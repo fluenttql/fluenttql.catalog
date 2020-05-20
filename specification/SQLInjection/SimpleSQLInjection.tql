@@ -18,7 +18,7 @@ Method sanitizer = new Method("org.owasp.html.PolicyFactory: java.lang.String sa
 Method sink = new Method("java.sql.Statement: java.sql.ResultSet executeQuery(java.lang.String)")
 			.in().param(0);
 
-new TaintFlow().from(source)									//source method
+new TaintFlowQuery().from(source)									//source method
 			.notThrough(sanitizer)								//sanitizer method
 			.to(sink)											//sink method
 			.report("There is a SQL Injection - CWE89!!!")		//report message

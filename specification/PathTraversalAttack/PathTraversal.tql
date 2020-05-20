@@ -29,14 +29,14 @@ Method sink2 = new Method("java.io.FileInputStream: java.io.FileInputStream File
 /**
  * This is the first taint flow that achieves path traversal attack.
  */
-TaintFlow tf1 = new TaintFlow()
+TaintFlowQuery tf1 = new TaintFlowQuery()
 	.from(servletSources)								//Source
 	.notThrough(sanitizer)								//sanitizer
 	.to(sink1)											//sink
 	.report("Path traversal - CWE22!")			//report message
 	.at(3); 								
 	
-TaintFlow tf2 = new TaintFlow()
+TaintFlowQuery tf2 = new TaintFlowQuery()
 	.from(servletSources)														//Source
 	.notThrough(sanitizer)														//sanitizer
 	.through(requiredPropagator)												//Required propagator, but has to be called after sanitizer is called.
@@ -48,6 +48,6 @@ TaintFlow tf2 = new TaintFlow()
 												 								*/
 	
 //TaintFlowSet for path traversal attack that contains the above both taint flows that achieves path traversal attack.
-TaintFlowSet pathTraversalTFSet = new TaintFlowSet()
-									.addTaintFlow(tf1)
-									.addTaintFlow(tf2);
+QueriesSet pathTraversalTFSet = new QueriesSet()
+									.addTaintFlowQuery(tf1)
+									.addTaintFlowQuery(tf2);

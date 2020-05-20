@@ -29,7 +29,7 @@ Method deSanitizer = new Method("org.owasp.esapi.Encoder: java.lang.String decod
 					.in().param(0)
 					.out().return();
 						
-new TaintFlow().from(source)                 		//source methods
+new TaintFlowQuery().from(source)                 		//source methods
 			.through(deSanitizer)					//de-sanitizer method that causes the vulnerability
 			.notThrough(sanitizer)					//sanitizer method that avoids the vulnerability
 			.to(servletSinks)                     	//sink methods

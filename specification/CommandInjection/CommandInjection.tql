@@ -24,7 +24,7 @@ Method sink = new Method("java.lang.ProcessBuilder: java.lang.Process start()")
 
 
 
-TaintFlow myTF = new TaintFlow();
+TaintFlowQuery myTF = new TaintFlowQuery();
 
 myTF.from(servletSources)								//Servlet Sources in our example.
 	.notThrough(sanitizer)								//Sanitizer to sanitize the user input before requiredPropagator
