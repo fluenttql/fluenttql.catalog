@@ -1,5 +1,5 @@
 # What is fluenttql.catalog?
-<a href="https://fluenttql.github.io/fluenttql.catalog/" target="blank">fluenttql.catalog</a> 
+<a href="https://fluenttql.github.io/fluenttql.catalog/" target="_blank">fluenttql.catalog</a> 
 is a micro-benchmark project for the fluentTQL Domain-Specific Language.
 This project contains example of the taint style vulnerabilities and
 the respective fluentTQL specifications. 
