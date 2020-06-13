@@ -76,7 +76,7 @@ Method source19 = new Method("javax.servlet.ServletRequest: java.lang.String get
 Method source20 = new Method("javax.servlet.ServletRequest: java.lang.String getLocalName()")
 				.out().return();
 				
-Method source21 = new Method("javax.servlet.ServletRequest: java.lang.String getLocalAddr)")
+Method source21 = new Method("javax.servlet.ServletRequest: java.lang.String getLocalAddr()")
 				.out().return();
 				
 Method source22 = new Method("javax.servlet.ServletRequest: java.lang.String getAuthType()")
