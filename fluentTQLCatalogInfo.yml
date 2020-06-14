@@ -1,0 +1,62 @@
+# General Information of fluentTQL.catalog
+---
+TaintStyleVulnerability:
+  - className: "catalog.CommandInjection.CWE77.CommandInjection"
+    category: "Command-injection"
+    cwe: "CWE77"
+
+  - className: "catalog.LDAPInjection.CWE90.LdapInjection"
+    category: "Ldap-injection"
+    cwe: "CWE90"
+
+  - className: "catalog.LogInjectionAttack.CWE117.LogInjection"
+    category: "Log-injection"
+    cwe: "CWE117"
+
+  - className: "catalog.NoSQLInjection.CWE943.NoSQLInjectionInSpringBoot"
+    category: "NoSQL-injection"
+    cwe: "CWE943"
+
+  - className: "catalog.NoSQLInjection.CWE943.NoSQLInjectionWithTwoSources"
+    category: "NoSQL-injection"
+    cwe: "CWE943"
+
+  - className: "catalog.OpenRedirect.CWE601.OpenRedirectAttack"
+    category: "Open Redirect Attack"
+    cwe: "CWE601"
+
+  - className: "catalog.PathTraversalAttack.CWE22.PathTraversal"
+    category: "Path Traversal Attack"
+    cwe: "CWE22"
+
+  - className: "catalog.SQLInjection.CWE89.SimpleSQLInjection"
+    category: "SQL-injection"
+    cwe: "CWE89"
+
+  - className: "catalog.SQLInjection.CWE89.SQLInjectionUsingServletRequest"
+    category: "SQL-injection"
+    cwe: "CWE89"
+
+  - className: "catalog.SQLInjection.CWE89.SQLiWithPreparedStatement"
+    category: "SQL-injection"
+    cwe: "CWE89"
+
+  - className: "catalog.TrustBoundaryViolation.CWE501.TrustBoundaryViolation"
+    category: "Trust Boundary Violation"
+    cwe: "CWE501"
+
+  - className: "catalog.XMLInjection.CWE91.XMLInjectionAttack"
+    category: "XML-injection"
+    cwe: "CWE91"
+
+  - className: "catalog.XPATHInjection.CWE643.XPathInjection"
+    category: "XPath-injection"
+    cwe: "CWE643"
+
+  - className: "catalog.XSS.CWE79.ReflexiveXSS"
+    category: "Reflexive XSS"
+    cwe: "CWE79"
+
+  - className: "catalog.XSS.CWE79.StoredXSS"
+    category: "Stored XSS"
+    cwe: "CWE79"
